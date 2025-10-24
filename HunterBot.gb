@@ -1,0 +1,36 @@
+#side Hunters
+#color F00
+
+#type HunterBot
+#hardware
+  processor 10
+  robot-sensor 15
+  blaster 25 3 25
+  engine .1
+  energy 200 5
+  solar-cells .12
+  armor 300
+
+#code
+do
+  0 engine-power!
+  energy 20 > if 57 periodic-robot-sensor and-if robot-found and-if
+    attack^
+  then
+  armor max-armor < energy 10 > and repair-rate!
+forever
+
+attack:
+  robot-position robot-velocity seek-moving-location
+  do
+    blaster-reload-time periodic-robot-sensor if
+      robot-found if
+        robot-position robot-velocity lead-blaster
+        robot-position robot-velocity seek-moving-location
+      else
+        return ;nobody here - give up
+      then
+    then
+  energy armor min 20 > while-loop
+return
+#end
